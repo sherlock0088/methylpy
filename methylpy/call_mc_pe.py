@@ -1372,7 +1372,7 @@ def call_methylated_sites_pe(inputf, sample, reference_fasta,
     #Remove intermediate bam file
     try:
         subprocess.check_call(shlex.split("rm -f "+inputf+".read2flipped.bam"+
-                                          " "+inputf+".read2flipped.bam.bai"))
+                                          " "+inputf+".read2flipped.bam.csi"))
     except:
         pass
 
