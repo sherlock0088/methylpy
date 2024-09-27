@@ -192,8 +192,7 @@ def parse_args():
                                  min_mapq=args.min_mapq,
                                  min_ch=args.min_num_ch,
                                  max_mch_level=args.max_mch_level,
-                                 buffer_line_number=args.buffer_line_number,
-                                 path_to_samtools=args.path_to_samtools)
+                                 buffer_line_number=args.buffer_line_number)
 
      elif args.command == "call-methylation-state":
           if args.paired_end:
@@ -218,7 +217,8 @@ def parse_args():
                                         remove_chr_prefix=args.remove_chr_prefix,
                                         add_snp_info=args.add_snp_info,
                                         path_to_files=args.path_to_output,
-                                        min_base_quality=args.min_base_quality)
+                                        min_base_quality=args.min_base_quality,
+                                        keep_temp_files=args.keep_temp_files)
           else:
                from methylpy.call_mc_se import call_methylated_sites
                call_methylated_sites(inputf=args.input_file,
@@ -434,7 +434,7 @@ def add_DMRfind_subparser(subparsers):
                                      + "to get more statistical power.")
      
      parser_dmrfind_opt.add_argument("--resid-cutoff",
-                                     type=int,
+                                     type=float,
                                      default=0.01,
                                      help="Results will have to show deviations in the contingency "
                                      + "table in the same direction as the rest of the window")
@@ -522,7 +522,7 @@ def add_merge_DMS_subparser(subparsers):
                                       + "reported")
 
      parser_mergedms_opt.add_argument("--resid-cutoff",
-                                      type=int,
+                                      type=float,
                                       default=0.01,
                                       help="Results will have to show deviations in the contingency "
                                       + "table in the same direction as the rest of the window")
@@ -1217,11 +1217,6 @@ def add_bam_filter_subparser(subparsers):
                                     default=0.7,
                                     help="Maximum mCH level for reads to be included.")
 
-     parser_filter_opt.add_argument("--path-to-samtools",
-                                type=str,
-                                default="",
-                                help="Path to samtools installation")
-     
      parser_filter_opt.add_argument("--buffer-line-number",
                                 type=int,
                                 default=100000,
@@ -1531,7 +1526,7 @@ def add_allc2bw_subparser(subparsers):
 
      allc2bw_opt.add_argument("--add-chr-prefix",
                               type=str2bool,
-                              default=True,
+                              default=False,
                               help="Boolean indicates whether to add \"chr\" in the chromosome names in "
                               +"input allc file to match chromosome names in genome sequence file. This option "
                               +"overrides --remove-chr-prefix.")
